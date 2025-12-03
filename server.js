@@ -45,7 +45,7 @@ sequelize
   .catch((err) => console.error(err));
 
 sequelize
-  .sync({ alter: true })
+  .sync()
   .then(() => console.log("Database synced"))
   .catch((err) => console.error(err));
 
