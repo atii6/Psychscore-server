@@ -18,7 +18,16 @@ import { auth } from "./middleware/auth.js";
 
 dotenv.config();
 
+console.log(process.env.CLIENT_URL);
+
 const app = express();
+app.use((req, res, next) => {
+  process.env.CLIENT_URL;
+  console.log("➡️  Request:", req.method, req.originalUrl);
+  console.log("🌐 Origin:", req.headers.origin);
+
+  next();
+});
 
 app.use(
   cors({
