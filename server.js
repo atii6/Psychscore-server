@@ -48,16 +48,16 @@ app.use(
 // app.use(API_ROUTES.USER, auth, userRoute);
 // app.use(API_ROUTES.AUTH, authRoute);
 
-sequelize
-  .authenticate()
-  .then(() => console.log("Database connected"))
-  .catch((err) => console.error(err));
+(async () => {
+  try {
+    await sequelize.authenticate();
 
-sequelize
-  .sync()
-  .then(() => console.log("Database synced"))
-  .catch((err) => console.error(err));
+    await sequelize.sync();
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server running on port ${process.env.PORT || 5000}`);
-});
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+})();
