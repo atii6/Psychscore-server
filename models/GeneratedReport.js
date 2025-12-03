@@ -4,7 +4,7 @@ export default (sequelize) => {
   const GeneratedReport = sequelize.define(
     "GeneratedReport",
     {
-      assessment_id: { type: DataTypes.NUMBER, allowNull: false },
+      assessment_id: { type: DataTypes.INTEGER, allowNull: false },
       template_id: { type: DataTypes.STRING, allowNull: true },
       report_content: { type: DataTypes.TEXT, allowNull: false },
       report_title: { type: DataTypes.STRING, allowNull: true },
