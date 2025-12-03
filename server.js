@@ -20,12 +20,29 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  "https://psychscore.vercel.app", // production
+  "https://psychscore.vercel.app/", // include trailing slash just in case
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(API_ROUTES.ASSESSMENT, auth, assessmentRoutes);
