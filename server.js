@@ -21,20 +21,24 @@ dotenv.config();
 console.log(process.env.CLIENT_URL);
 
 const app = express();
-app.use((req, res, next) => {
-  process.env.CLIENT_URL;
-  console.log("➡️  Request:", req.method, req.originalUrl);
-  console.log("🌐 Origin:", req.headers.origin);
 
-  next();
-});
+const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    // credentials: true,
+    origin: allowedOrigin,
+    credentials: true,
   })
 );
+
+app.options(
+  "*",
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  })
+);
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(API_ROUTES.ASSESSMENT, auth, assessmentRoutes);
