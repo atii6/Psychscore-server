@@ -31,14 +31,6 @@ app.use(
   })
 );
 
-app.options(
-  "*",
-  cors({
-    origin: allowedOrigin,
-    credentials: true,
-  })
-);
-
 app.use(cookieParser());
 app.use(express.json());
 app.use(API_ROUTES.ASSESSMENT, auth, assessmentRoutes);
