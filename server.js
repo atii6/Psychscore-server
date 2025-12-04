@@ -15,12 +15,16 @@ import authRoute from "./routes/authRoute.js";
 import { API_ROUTES } from "./utils/constants.js";
 import cookieParser from "cookie-parser";
 import { auth } from "./middleware/auth.js";
+import { log } from "./utils/logger.js";
 
 dotenv.config();
 
-console.log(process.env.CLIENT_URL);
-
 const app = express();
+
+app.use((req, res, next) => {
+  log.info(`${req.method} ${req.originalUrl}`);
+  next();
+});
 
 const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 
