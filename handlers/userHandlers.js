@@ -37,18 +37,19 @@ export const getUserById = async (id) => {
 
 export const updateUser = async (id, data) => {
   const user = await models.User.findByPk(id);
+  const { password, ...rest } = data;
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  if (data.password) {
-    data.password = await bcrypt.hash(data.password, 10);
-  } else {
-    data.password = user.password;
+  let payload = { ...rest };
+
+  if (password) {
+    payload.password = await bcrypt.hash(password, 10);
   }
 
-  const updatedUser = await user.update(data);
+  const updatedUser = await user.update(payload);
 
   return sanitizeUser(updatedUser);
 };

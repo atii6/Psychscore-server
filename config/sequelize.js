@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import { log } from "../utils/logger";
 dotenv.config();
 
 const env = process.env.NODE_ENV || "development";
@@ -27,7 +28,7 @@ const config = {
         rejectUnauthorized: false,
       },
     },
-    logging: false,
+    logging: log.info,
   },
 };
 
