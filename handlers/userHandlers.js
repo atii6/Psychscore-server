@@ -1,7 +1,6 @@
 import models from "../models/index.js";
 import bcrypt from "bcrypt";
 import sanitizeUser from "../utils/sanitizeUsers.js";
-import { log } from "../utils/logger.js";
 
 export const createUser = async (data) => {
   const { full_name, email, password } = data;
@@ -11,7 +10,7 @@ export const createUser = async (data) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-
+  // TODO sanitize or remove password
   return await models.User.create({
     ...data,
     password: hashedPassword,
@@ -47,7 +46,6 @@ export const updateUser = async (id, data) => {
   let payload = { ...rest };
 
   if (password) {
-    log.info("DEBUG: Updating password", JSON.stringify(data));
     payload.password = await bcrypt.hash(password, 10);
   }
 

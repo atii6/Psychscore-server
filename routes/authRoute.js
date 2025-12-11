@@ -2,6 +2,7 @@ import express from "express";
 import { register, login, logout } from "../controllers/authController.js";
 import { auth } from "../middleware/auth.js";
 import models from "../models/index.js";
+import sanitizeUser from "../utils/sanitizeUsers.js";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.get("/me", auth, async (req, res) => {
 
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  res.json({ user });
+  res.json({ user: sanitizeUser(user) });
 });
 
 export default router;
