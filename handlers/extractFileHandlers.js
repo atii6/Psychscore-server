@@ -18,17 +18,20 @@ export const extractDataInline = async (uploadId) => {
 
   const extractionSchema = {
     type: "object",
+    additionalProperties: false,
     properties: {
       tests: {
         type: "array",
         items: {
           type: "object",
+          additionalProperties: false,
           properties: {
             test_name: { type: "string" },
             scores: {
               type: "array",
               items: {
                 type: "object",
+                additionalProperties: false,
                 properties: {
                   subtest_name: { type: "string" },
                   scaled_score: { type: "number" },
@@ -36,7 +39,13 @@ export const extractDataInline = async (uploadId) => {
                   percentile_rank: { type: "number" },
                   descriptor: { type: "string" },
                 },
-                required: ["subtest_name"],
+                required: [
+                  "subtest_name",
+                  "scaled_score",
+                  "composite_score",
+                  "percentile_rank",
+                  "descriptor",
+                ],
               },
             },
           },
@@ -46,6 +55,7 @@ export const extractDataInline = async (uploadId) => {
     },
     required: ["tests"],
   };
+
   console.log("cleanText==>", cleanedText);
   const parsedData = await parseWithLLM({
     text: cleanedText,
@@ -60,9 +70,13 @@ export const extractDataInline = async (uploadId) => {
     status: "done",
   });
 
+  if (!parsedData?.tests) {
+    console.warn("LLM returned invalid structure", parsedData);
+  }
+
   return {
     status: "success",
-    tests: parsedData.tests || [],
+    tests: Array.isArray(parsedData?.tests) ? parsedData.tests : [],
     raw_llm_outputs: parsedData.raw_llm_outputs || [],
   };
 };

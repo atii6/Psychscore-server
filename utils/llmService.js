@@ -39,28 +39,47 @@ ${chunk}
           {
             role: "system",
             content:
-              "You extract structured data as JSON according to a provided schema.",
+              "Extract data strictly following the provided JSON schema.",
           },
-          { role: "user", content: promptForChunk(chunk) },
+          {
+            role: "user",
+            content: promptForChunk(chunk),
+          },
         ],
-        max_tokens: 2000,
-        temperature: 0,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "extraction_schema",
+            schema: jsonSchema,
+            strict: true,
+          },
+        },
       });
 
-      const out = resp.choices?.[0]?.message?.content || "";
+      const out = resp.choices[0].message.content || "";
       combinedResults.push(out);
     } catch (err) {
-      console.error("LLM chunk parsing error:", err);
+      console.error("LLM chunk parsing error:", {
+        status: err.status,
+        message: err.error?.message || err.message,
+        requestId: err.requestID,
+      });
       combinedResults.push("");
     }
   }
 
   for (const r of combinedResults) {
+    if (!r) continue;
     try {
       const parsed = JSON.parse(r);
-      return parsed;
-    } catch (err) {}
+      if (parsed && typeof parsed === "object") {
+        return parsed;
+      }
+    } catch {}
   }
 
-  return { raw_llm_outputs: combinedResults };
+  return {
+    tests: [],
+    raw_llm_outputs: combinedResults,
+  };
 };
