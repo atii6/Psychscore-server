@@ -16,11 +16,11 @@ const config = {
     logging: console.log,
   },
   production: {
-    database: process.env.PGDATABASE,
-    username: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    host: process.env.PGHOST,
-    port: process.env.PGPORT || 5432,
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 5432,
     dialect: "postgres",
     dialectOptions: {
       ssl: {
@@ -36,7 +36,7 @@ const sequelize = new Sequelize(
   config[env].database,
   config[env].username,
   config[env].password,
-  config[env]
+  config[env],
 );
 
 export default sequelize;
