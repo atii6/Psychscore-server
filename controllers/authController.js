@@ -11,24 +11,24 @@ const generateToken = (user) => {
       role: user.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "24h" }
+    { expiresIn: "24h" },
   );
 };
 
-const setTokenCookie = (res, token) => {
-  // res.cookie("token", token, {
-  //   httpOnly: true,
-  //   secure: process.env.NODE_ENV === "production",
-  //   sameSite: "lax",
-  //   maxAge: 24 * 60 * 60 * 1000,
-  // });
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-  });
-};
+// const setTokenCookie = (res, token) => {
+//   // res.cookie("token", token, {
+//   //   httpOnly: true,
+//   //   secure: process.env.NODE_ENV === "production",
+//   //   sameSite: "lax",
+//   //   maxAge: 24 * 60 * 60 * 1000,
+//   // });
+//   res.cookie("token", token, {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: "none",
+//     path: "/",
+//   });
+// };
 
 export const register = async (req, res) => {
   try {
@@ -51,10 +51,9 @@ export const register = async (req, res) => {
     });
 
     const token = generateToken(user);
-    setTokenCookie(res, token);
-
     res.json({
-      message: "Registration successful",
+      success: true,
+      token: token,
       user: sanitizeUser(user),
     });
   } catch (err) {
@@ -74,24 +73,29 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const token = generateToken(user);
-    setTokenCookie(res, token);
-
+    // setTokenCookie(res, token);
     res.json({
-      message: "Login successful",
+      success: true,
+      token: token,
       user: sanitizeUser(user),
     });
+
+    // res.json({
+    //   message: "Login successful",
+    //   user: sanitizeUser(user),
+    // });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-  });
+  // res.clearCookie("token", {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "none",
+  //   path: "/",
+  // });
 
   res.json({ message: "Logged out successfully" });
 };

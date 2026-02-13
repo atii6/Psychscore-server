@@ -13,7 +13,6 @@ import extractFileRoute from "./routes/extractFileRoute.js";
 import userRoute from "./routes/userRoute.js";
 import authRoute from "./routes/authRoute.js";
 import { API_ROUTES } from "./utils/constants.js";
-import cookieParser from "cookie-parser";
 import { auth } from "./middleware/auth.js";
 import { log } from "./utils/logger.js";
 
@@ -31,11 +30,10 @@ const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 app.use(
   cors({
     origin: allowedOrigin,
-    credentials: true,
-  })
+    credentials: false,
+  }),
 );
 
-app.use(cookieParser());
 app.use(express.json());
 app.use(API_ROUTES.ASSESSMENT, auth, assessmentRoutes);
 app.use(API_ROUTES.GENERATED_REPORT, auth, generateReportRoutes);
