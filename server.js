@@ -30,7 +30,9 @@ const allowedOrigin = process.env.CLIENT_URL?.replace(/\/$/, "");
 app.use(
   cors({
     origin: allowedOrigin,
-    credentials: false,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
