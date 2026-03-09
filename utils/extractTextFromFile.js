@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import * as pdfParse from "pdf-parse";
+import pdfParse from "pdf-parse";
 import Tesseract from "tesseract.js";
 import * as XLSX from "xlsx";
 import { parse } from "csv-parse/sync";
