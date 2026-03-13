@@ -11,7 +11,9 @@ export const createAssessment = async (data) => {
 };
 
 export const getAllAssessments = async () => {
-  return await models.Assessment.findAll();
+  return await models.Assessment.findAll({
+    order: [["created_date", "DESC"]],
+  });
 };
 
 export const getAssessmentById = async (id) => {
