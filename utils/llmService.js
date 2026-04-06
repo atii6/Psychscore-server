@@ -159,6 +159,12 @@ EXAMPLE ROW:
    → scaled_score: 4
    → percentile_rank: 2
 
+EXAMPLE ROW:
+   " (information) IN 9 7 16 7 0.99"
+   → subtest_name: "Information"
+   → scaled_score: 7
+   → percentile_rank: 16
+
 CRITICAL: The 7th column (Ref. Group Scaled Score) is NOT the scaled_score. 
 Always use the 5th column (first number after raw score) as scaled_score.
 Skip rows where Scaled Score is "-" or missing.
